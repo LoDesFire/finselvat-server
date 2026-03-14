@@ -23,6 +23,11 @@ def outgoing_messages(
         search_request: SearchRequest,
         transaction_service: TransactionService = Depends(get_transaction_service),
 ):
+    """Get incoming messages for System A.
+
+    Returns list of transactions with messages addressed to System A
+    for the specified time period with pagination.
+    """
     try:
         found_transactions = transaction_service.search_transactions(search_request)
     except ValidationError:
@@ -42,6 +47,11 @@ def incoming_messages(
         transaction_data: TransactionData,
         transaction_service: TransactionService = Depends(get_transaction_service),
 ):
+    """Send messages from System A to System B.
+
+    Saves incoming transactions and generates response receipts (type 215)
+    for all messages except receipts.
+    """
     try:
         response_transactions = transaction_service.save_and_response_transactions(transaction_data.transactions)
     except ValidationError:

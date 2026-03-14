@@ -8,10 +8,23 @@ from utils.base64_utils import encode_str_base64
 
 
 class TransactionService:
+    """Service for managing transactions.
+    
+    Handles business logic: saving transactions, generating receipts,
+    and searching transactions by criteria.
+    """
     def __init__(self, transaction_repository: TransactionRepository):
         self._transaction_repo = transaction_repository
 
     def save_and_response_transactions(self, transactions: list[Transaction]) -> list[Transaction]:
+        """Save transactions and generate response receipts.
+        
+        For each incoming transaction:
+        - Saves to repository
+        - If message type is not "receipt", creates a response receipt (type 215)
+        
+        Returns list of receipt transactions to send to System A.
+        """
         response_transactions: list[Transaction] = []
 
         for transaction in transactions:
@@ -51,6 +64,11 @@ class TransactionService:
         return response_transactions
 
     def search_transactions(self, search_request: SearchRequest) -> list[Transaction]:
+        """Search transactions by date range with pagination.
+        
+        Returns transactions addressed to System A
+        for the specified time period.
+        """
         return self._transaction_repo.search_transactions(
             search_request.start_date,
             search_request.end_date,

@@ -10,10 +10,16 @@ from schemas.transactions import Transaction
 
 
 class TransactionRepository:
+    """Repository for working with transactions in the database.
+
+    Encapsulates data access: saving, searching, and counting transactions.
+    """
     def __init__(self, session: Session):
         self._session = session
 
     def save_transaction(self, transaction: Transaction):
+        """Save a transaction to the database.
+        """
         transaction_dump = transaction.model_dump(exclude={"metadata"}, by_alias=False)
         transaction_dump.update(
             {
@@ -31,6 +37,11 @@ class TransactionRepository:
             limit: int,
             offset: int,
     ):
+        """Search transactions by date range filtered by receiver.
+
+        Returns transactions for SYSTEM_A, sorted by time,
+        with pagination applied (limit/offset).
+        """
         stmt = (
             select(DBTransaction)
             .where(
@@ -58,6 +69,7 @@ class TransactionRepository:
         return transactions
 
     def transactions_count(self) -> int:
+        """Return total number of transactions in the database."""
         stmt = (
             select(count(DBTransaction.id))
         )

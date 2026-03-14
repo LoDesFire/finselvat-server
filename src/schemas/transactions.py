@@ -16,6 +16,8 @@ MessageDataT = TypeVar("MessageDataT")
 
 
 class Message(BaseSchema, DataValidatorsMixin, Generic[MessageDataT]):
+    """Information message in the document exchange system.
+    """
     data: MessageDataT
     sender_batch: str
     receiver_batch: str
@@ -95,6 +97,10 @@ TransactionDataType = Annotated[
 
 
 class Transaction(BaseSchema, DataValidatorsMixin, SignatureValidatorMixin):
+    """Transaction — storage unit in the registry.
+
+    Validator checks hash and signature match.
+    """
     transaction_type: int
     data: TransactionDataType
     hash: str
@@ -106,11 +112,17 @@ class Transaction(BaseSchema, DataValidatorsMixin, SignatureValidatorMixin):
     transaction_out: Optional[str]
 
     class ContextKeys(enum.Enum):
+        """Context keys for validation."""
         NEED_NEW_HASH_AND_SIGN = 0
 
     @field_validator('sign', mode='wrap')
     @classmethod
     def validate_sign_wrap(cls, value: Any, handler: ValidatorFunctionWrapHandler, info: ValidationInfo) -> str:
+        """Signature field validator.
+
+        If NEED_NEW_HASH_AND_SIGN=True, signature is not validated
+        (used when creating new transactions).
+        """
         if info.context is None:
             need_new_hash = False
         else:
@@ -124,6 +136,11 @@ class Transaction(BaseSchema, DataValidatorsMixin, SignatureValidatorMixin):
 
     @model_validator(mode='after')
     def validate_model_hash(self, info: ValidationInfo) -> Self:
+        """Transaction hash validator.
+
+        If NEED_NEW_HASH_AND_SIGN=True, computes new hash and signature.
+        Otherwise, validates that hash matches transaction data.
+        """
         if info.context is None:
             need_new_hash = False
         else:

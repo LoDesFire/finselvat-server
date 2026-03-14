@@ -21,6 +21,10 @@ app.include_router(main_router)
 
 @app.exception_handler(ValidationError)
 def validation_error_exception_handler(_: Request, exc: ValidationError):
+    """Handler for Pydantic validation errors.
+    
+    Returns 400 Bad Request response with validation error details.
+    """
     logger.error("Validation Error. %s", str(exc))
     status_code = status.HTTP_400_BAD_REQUEST
     error = ErrorSchema(
@@ -34,6 +38,11 @@ def validation_error_exception_handler(_: Request, exc: ValidationError):
 
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(_: Request, exc: StarletteHTTPException):
+    """Handler for FastAPI/Starlette HTTP exceptions.
+    
+    Returns response with appropriate HTTP status code.
+    Details are not included for 500 errors.
+    """
     logger.error("Starlette HTTPException. %s", str(exc))
     status_code = exc.status_code
     details = []
@@ -52,6 +61,11 @@ async def http_exception_handler(_: Request, exc: StarletteHTTPException):
 
 @app.exception_handler(Exception)
 async def global_exception_handler(_: Request, exc: Exception):
+    """Global handler for all unhandled exceptions.
+    
+    Returns 500 Internal Server Error response without details
+    (for security, does not expose internal error information).
+    """
     logger.error("Unknown Exception. %s", str(exc))
 
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR

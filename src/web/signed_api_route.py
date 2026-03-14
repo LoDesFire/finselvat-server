@@ -9,6 +9,12 @@ from utils.base64_utils import encode_bytes_base64
 from utils.hash_utils import sha256_hash
 
 class SignedAPIRoute(APIRoute):
+    """Route for handling signed API requests.
+    
+    Automatically wraps all POST requests and responses in SignedApiData envelope:
+    - Extracts data from the `data` field of incoming requests
+    - Signs responses with SHA-256 hash and wraps in SignedApiData
+    """
     def get_route_handler(self) -> Callable:
         original_route_handler = super().get_route_handler()
 
@@ -16,12 +22,15 @@ class SignedAPIRoute(APIRoute):
             if request.method != "POST":
                 return await original_route_handler(request)
 
+            # Extract signed request data
             request_body = await request.body()
             signed_api_request = SignedAPIData.model_validate_json(request_body)
             request._body = signed_api_request.data
 
+            # Call original route handler
             response: Response = await original_route_handler(request)
 
+            # Form signed response
             signed_api_response = SignedAPIData(
                 data=encode_bytes_base64(response.body),
                 sign=encode_bytes_base64(sha256_hash(response.body)),
