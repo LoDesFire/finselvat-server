@@ -1,5 +1,4 @@
 import enum
-from decimal import Decimal
 from typing import Optional, Union, TypeVar, Generic, Annotated, Self, Any
 
 from pydantic import UUID4, Field, Tag, Discriminator, Base64Bytes, model_validator, field_validator, AliasChoices
@@ -8,7 +7,7 @@ from pydantic_core.core_schema import ValidationInfo, ValidatorFunctionWrapHandl
 from constants import InfoMessageType
 from schemas.mixins import DataValidatorsMixin, SignatureValidatorMixin
 
-from src.schemas.base_schema import BaseSchema, UTCDateTime
+from src.schemas.base_schema import BaseSchema, UTCDateTime, Decimal2
 from utils.base64_utils import encode_bytes_base64
 
 from utils.hash_utils import sha256_hash
@@ -30,8 +29,8 @@ class Message(BaseSchema, DataValidatorsMixin, Generic[MessageDataT]):
 class Tax(BaseSchema):
     number: str
     name_tax: str
-    amount: Decimal
-    penny_amount: Decimal
+    amount: Decimal2
+    penny_amount: Decimal2
 
 
 class Obligation(BaseSchema):
@@ -56,7 +55,7 @@ class IssuedGuaranteeMessageData(BaseSchema):
     end_date: UTCDateTime
     currency_code: str
     currency_name: str
-    amount: Decimal
+    amount: Decimal2
     revokation_info: str
     claim_right_transfer: str
     payment_period: str

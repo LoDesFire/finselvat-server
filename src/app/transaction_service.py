@@ -20,7 +20,7 @@ class TransactionService:
             if transaction.data.info_message_type == InfoMessageType.RECEIVED_GUARANTEE:
                 continue
 
-            transactions.append(
+            response_transactions.append(
                 Transaction.model_validate(
                     obj=dict(
                         transaction_type=TransactionType.INFO_MESSAGE,
@@ -38,7 +38,7 @@ class TransactionService:
                         ),
                         hash="",
                         sign=b'',
-                        signer_cert=encode_str_base64("asd"),
+                        signer_cert=encode_str_base64(SystemTypes.SYSTEM_B),
                         transaction_time=datetime.datetime.now(tz=datetime.timezone.utc),
                         metadata=None,
                         transaction_in=None,

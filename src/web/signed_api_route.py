@@ -3,6 +3,7 @@ from typing import Callable
 from fastapi import Request, Response
 from fastapi.routing import APIRoute
 
+from constants import SystemTypes
 from schemas.signed_api_data import SignedAPIData
 from utils.base64_utils import encode_bytes_base64
 from utils.hash_utils import sha256_hash
@@ -24,7 +25,7 @@ class SignedAPIRoute(APIRoute):
             signed_api_response = SignedAPIData(
                 data=encode_bytes_base64(response.body),
                 sign=encode_bytes_base64(sha256_hash(response.body)),
-                signer_cert=encode_bytes_base64(b"SYSTEM-B")
+                signer_cert=encode_bytes_base64(SystemTypes.SYSTEM_B.encode("utf-8")),
             )
             response.body = signed_api_response.model_dump_json().encode("utf-8")
             response.headers.update({"Content-Length": str(len(response.body))})

@@ -10,6 +10,9 @@ class DataValidatorsMixin:
     @field_validator('data', mode='before', check_fields=False)
     @classmethod
     def validate_data(cls, value: Any) -> Any:
+        if isinstance(value, dict):
+            raise ValueError("Data is not valid Base64")
+
         if isinstance(value, str):
             return json.loads(decode_str_base64(value))
         return value
