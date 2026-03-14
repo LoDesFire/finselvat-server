@@ -1,0 +1,11 @@
+{
+  "TransactionType": 9,
+  "Data": "eyJEYXRhIjoiZXlKT1lXMWxJam9pWVhOa0lpd2lRbUZ1YTBkMVlYSmhiblJsWlVoaGMyZ2lPaUpoYzJRaUxDSlRhV2R1SWpvaVdWaE9hMWxYVVQwaUxDSlRhV2R1WlhKRFpYSjBJam9pV1ZoT2F5SjkiLCJTZW5kZXJCYXRjaCI6ImFhc2QiLCJSZWNlaXZlckJhdGNoIjoiYWFzZCIsIkluZm9NZXNzYWdlVHlwZSI6MjAyLCJNZXNzYWdlVGltZSI6IjIwMjUtMTItMTBUMDA6MDA6MDBaIiwiQ2hhaW5HdWlkIjoiMTgwMGMxNmQtMzgwZC00YWM5LWIxNjktYTg1N2VlMTAwODNjIiwiUHJldmlvdXNUcmFuc2FjdGlvbkhhc2giOm51bGwsIk1ldGFkYXRhIjpudWxsfQ==",
+  "Hash": "9AB6AB5BBAABBC4E12AFEECA4A711A93341EF7EEEC85D145DA4D24F9EE246282",
+  "Sign": "YQ==",
+  "SignerCert": "YXNkYQ==",
+  "TransactionTime": "2025-12-10T00:00:00Z",
+  "Metadata": null,
+  "TransactionIn": null,
+  "TransactionOut": null
+}
